@@ -1,0 +1,28 @@
+.aboveTarget
+{
+	background-color:#B8FF70;
+}
+.onTarget
+{
+	background-color:#CCE6FF;
+}
+.failing-1
+{
+	background-color:orange;	
+}
+.failing-3
+{
+	background-color:#FF4D4D;
+}
+td
+{
+	border:1px solid black;
+}
+.nameCell
+{
+	width:100px;
+}
+#gradeCell
+{
+	width:40px;
+}
