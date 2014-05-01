@@ -6,6 +6,9 @@ graphs.controller("tableCtrl",function($scope,$http){
     success(function(data, status, headers, config) {
     	
       $scope.students = data;
+      init_database(data);
+      $scope.linear_db = linear_db;
+      $scope.headers_db = headers_db;
 
     }).
     error(function(data, status, headers, config) {
@@ -33,7 +36,7 @@ graphs.controller("tableCtrl",function($scope,$http){
 			if(grade.name==studentGrade){
 				score= grade.score;
 			}
-		})
+		});
 		return score;
 	}
 	
@@ -71,3 +74,5 @@ graphs.controller("tableCtrl",function($scope,$http){
 	}
 
 });
+
+	
