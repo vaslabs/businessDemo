@@ -1,5 +1,6 @@
 //input is students in rigneys_format
 GRADES_IDX = {'actual':0, 'predicted':1, 'target':2};
+student_hash = {};
 function linearFormat(student_entries) {
 	linear_representation = [];
 	for (index in student_entries) {
@@ -14,6 +15,7 @@ function linearFormat(student_entries) {
 		}//for
 	
 		converted_entry = [student["name"], terms];
+		student_hash[student["name"]] = terms;
 		linear_representation.push(converted_entry);
 	}//for
 	return linear_representation;

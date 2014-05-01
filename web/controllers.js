@@ -1,15 +1,19 @@
 var graphs = angular.module("graphs",[]);
+graphs.config(function($compileProvider){
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|javascript):/);
+});
 graphs.controller("tableCtrl",function($scope,$http){
+	
 	$scope.query='';
 	
 	$http.get('/rigneys_format.json').
     success(function(data, status, headers, config) {
     	
-      $scope.students = data;
-      init_database(data);
-      $scope.linear_db = linear_db;
-      $scope.headers_db = headers_db;
-
+        $scope.students = data;
+        init_database(data);
+        $scope.linear_db = linear_db;
+        $scope.headers_db = headers_db;
+	    database = data;
     }).
     error(function(data, status, headers, config) {
     });
@@ -23,7 +27,14 @@ graphs.controller("tableCtrl",function($scope,$http){
     error(function(data, status, headers, config) {
     });
 	
-	
+	$http.get('/betterGradeMap.json').
+    success(function(data, status, headers, config) {
+    
+    	grade_map_db = data;	
+    
+    }).
+    error(function(data, status, headers, config) {
+    });
 	
 	//$scope.isFailing= function(data){
 		//return data.grade < data.target
