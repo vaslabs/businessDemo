@@ -63,19 +63,28 @@
     </ul>
   </div>
 </div>
-		<table class="datasheet" style="border:1px solid black;" ng-repeat="student in students">
-			<tr>
-				<td class="nameCell">{{student.name}}</td>
-				<td id="gradeCell" ng-repeat="grade in student.grades">{{grade.current}} </td>
-			</tr>
-			<tr>
-				<td class="nameCell"></td>
-				<td  id="gradeCell" ng-repeat="grade in student.grades">{{grade.target}} </td>
-			</tr>
-			<tr>
-				<td class="nameCell"></td>
-				<td id="gradeCell" ng-repeat="grade in student.grades" class="{{studentStatus(grade.predicted,grade.target)}}">{{grade.predicted}} </td>
-			</tr>
+		<table class="datasheet" style="border:1px solid black;">
+			<thead>
+				<tr>
+					<th>Name</th>
+	   				<th ng-repeat="header in students[0].grades">Term {{ header.term }}</th>
+	 			</tr>
+ 			</thead>
+ 			
+ 			<tbody ng-repeat="student in students">
+				<tr>
+					<td class="nameCell">{{student.name}}</td>
+					<td id="gradeCell" ng-repeat="grade in student.grades">{{grade.actual}} </td>
+				</tr>
+				<tr>
+					<td class="nameCell"><b>Target</b></td>
+					<td  id="gradeCell" ng-repeat="grade in student.grades">{{grade.target}} </td>
+				</tr>
+				<tr style="border-bottom:3px solid black;">
+					<td class="nameCell"><b>Predicted</b></td>
+					<td id="gradeCell" ng-repeat="grade in student.grades" class="{{studentStatus(grade.predicted,grade.target)}}">{{grade.predicted}} </td>
+				</tr>
+			</tbody>
 		</table>
 	</body>
 </html>
