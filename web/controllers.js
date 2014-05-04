@@ -5,6 +5,21 @@ graphs.config(function($compileProvider){
 graphs.controller("tableCtrl",function($scope,$http){
 	
 	$scope.query='';
+	$scope.gradeMapDB;
+	
+	$http.get('/betterGradeMap.json').
+    success(function(data, status, headers, config) {
+    
+    	$scope.gradeMapDB = data;
+    	$scope.reverseGradeMapDB = new Array();
+    	angular.forEach($scope.gradeMapDB,function(grade,key){
+    		alert(key);
+    		$scope.reverseGradeMapDB.push(key);
+    	});
+    
+    }).
+    error(function(data, status, headers, config) {
+    });
 	
 	$http.get('/rigneys_format.json').
     success(function(data, status, headers, config) {
@@ -14,6 +29,7 @@ graphs.controller("tableCtrl",function($scope,$http){
         $scope.linear_db = linear_db;
         $scope.headers_db = headers_db;
 	    database = data;
+	    $scope.filterTerm=getCurrentTerm(linear_db);
     }).
     error(function(data, status, headers, config) {
     });
@@ -27,41 +43,29 @@ graphs.controller("tableCtrl",function($scope,$http){
     error(function(data, status, headers, config) {
     });
 	
-	$http.get('/betterGradeMap.json').
-    success(function(data, status, headers, config) {
-    
-    	grade_map_db = data;	
-    
-    }).
-    error(function(data, status, headers, config) {
-    });
 	
-	//$scope.isFailing= function(data){
-		//return data.grade < data.target
-	//}
 	
-	$scope.convert = function(studentGrade){
-		
-		var score = -1;
-		angular.forEach($scope.grades,function(grade,x){
-			if(grade.name==studentGrade){
-				score= grade.score;
-			}
-		});
-		return score;
+	
+	
+	$scope.convertToGrade = function(studentGrade){
+
+		var toReturn = studentGrade;
+		if($scope.gradeMapDB[studentGrade]!=null){
+			toReturn= $scope.gradeMapDB[studentGrade];
+		}
+		return toReturn;
 	}
 	
 	$scope.studentStatus= function(grade,target){
 		
-		var diff;
+		var diff=0;
 		if(grade==null || target==null){
 			return "";
 		}
-		var targetScore = $scope.convert(target);
-		var gradeScore = $scope.convert(grade);
+		var targetScore = $scope.convertToGrade(target);
+		var gradeScore = $scope.convertToGrade(grade);
 		
 		diff = targetScore - gradeScore;
-		alert(targetScore);
 		if(diff >= 3){
 			return "failing-3";
 		}
@@ -76,12 +80,55 @@ graphs.controller("tableCtrl",function($scope,$http){
 		}
 	}
 	
-	$scope.showFailing= function(){
-		//$scope.query=$scope.isFailing;
+	$scope.isFailing = function(student){
+		var status = $scope.studentStatus(student[1][7][0], student[1][7][1]);
+		return status=="failing-3" || status=="failing-1";
+		
 	}
 	
-	$scope.showAll= function(){
-		$scope.query='';
+	var showAll=true;
+	$scope.filterFailingStatus="Show Failing"
+	$scope.setFilter = function(){
+		if(showAll){
+			showAll=false;
+			$scope.query = $scope.isFailing;
+			$scope.filterFailingStatus="Show All";
+		}
+		else{
+			showAll=true;
+			$scope.query ='';
+			$scope.filterFailingStatus="Show Failing";
+		}
+		
+	}
+	$scope.showAsScores=false;
+	$scope.scoresStatus="Show as Scores"
+	$scope.toScores = function(){
+		
+		if(!$scope.showAsScores){
+			$scope.showAsScores=true;
+			$scope.scoresStatus="Show as Grades"
+			angular.forEach($scope.linear_db, function(student,key){
+				angular.forEach(student[1], function(term, key){
+					term[0] = $scope.convertToGrade(term[0]);
+					term[1] = $scope.convertToGrade(term[1]);
+				
+				});
+			});
+		}
+		else{
+			$scope.showAsScores=false;
+			$scope.scoresStatus="Show as Scores"
+			alert( $scope.gradeMapDB[1]);
+			angular.forEach($scope.linear_db, function(student,key){
+				angular.forEach(student[1], function(term, key){
+					alert($scope.reverseGradeMapDB[1])
+					term[0] = $scope.reverseGradeMapDB[term[0]+3];
+					term[1] = $scope.reverseGradeMapDB[term[1]+3];
+				
+				});
+			});
+		}
 	}
 
 });

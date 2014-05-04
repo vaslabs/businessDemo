@@ -7,6 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
 		<link rel="stylesheet" type="text/css" href="css/bootswatch.min.css"/>
 		<link rel="stylesheet" type="text/css" href="css/formatting.css"/>
+		<script src="util.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     	<script src="css/bootstrap.min.js"></script>
     	<script src="css/bootswatch.js"></script>
@@ -35,8 +36,8 @@
   </div>
   <div class="navbar-collapse collapse navbar-inverse-collapse">
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Active</a></li>
-      <li><a href="#">Link</a></li>
+      <li class="active"><a href="#" ng-click="setFilter()" >{{filterFailingStatus}}</a></li>
+      <li><a href="#" ng-click="toScores()">{{scoresStatus}}</a></li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -75,19 +76,17 @@
 	 			</tr>
  			</thead>
  			
- 			<tbody ng-repeat="student in linear_db">
-				<tr>
-					<td class="nameCell"><a href="javascript:individual_graph('{{student[0]}}');">{{student[0]}}</a></td>
-					<td id="gradeCell" ng-repeat="term in student[1]">{{term[0]}} </td>
-				</tr>
+ 			<tbody ng-repeat="student in linear_db | filter:query">
+					<td rowspan="2" class="nameCell"><a href="javascript:individual_graph('{{student[0]}}', {{gradeMapDB}}, {{showAsScores}});">{{student[0]}}</a></td>
 				<tr>
 					<td class="nameCell"><b>Predicted</b></td>
-					<td id="gradeCell" ng-repeat="term in student[1]" class="{{studentStatus(term[1],term[2])}}">{{term[1]}} </td>
+					<td id="gradeCell" ng-repeat="term in student[1]" class="predicted-{{term[2]}}-{{studentStatus(term[0],term[1])}}">{{term[0]}} </td>
 					
 				</tr>
 				<tr style="border-bottom:3px solid black;">
+				<td></td>
 					<td class="nameCell"><b>Target</b></td>
-					<td id="gradeCell" ng-repeat="term in student[1]">{{term[2]}} </td>
+					<td id="gradeCell" ng-repeat="term in student[1]">{{term[1]}} </td>
 				</tr>
 			</tbody>
 		</table>
