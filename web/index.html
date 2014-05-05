@@ -52,7 +52,7 @@
       </li>
     </ul>
     <form class="navbar-form navbar-left">
-      <input type="text" class="form-control col-lg-8" placeholder="Search">
+      <input type="text" class="form-control col-lg-8" placeholder="Search" ng-model="searchText">
     </form>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="#">Link</a></li>
@@ -76,7 +76,7 @@
 	 			</tr>
  			</thead>
  			
- 			<tbody ng-repeat="student in linear_db | filter:query">
+ 			<tbody ng-repeat="student in linear_db | filter:searchText | filter:query">
 					<td rowspan="2" class="nameCell"><a href="javascript:individual_graph('{{student[0]}}', {{gradeMapDB}}, {{showAsScores}});">{{student[0]}}</a></td>
 				<tr>
 					<td class="nameCell"><b>Predicted</b></td>
